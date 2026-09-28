@@ -1,0 +1,234 @@
+<!--
+  ============================================================================
+  Блок «Одна кухня в трёх светах» для сайта «Палки и Балки»
+  ============================================================================
+
+  ЧТО СКОПИРОВАТЬ
+
+    images/day.webp      →  img/light/day.webp
+    images/sunset.webp   →  img/light/sunset.webp
+    images/evening.webp  →  img/light/evening.webp
+
+    Именно в img/ — tools/build_single.py собирает всё, что попадает под
+    src="img/…", и вшивает как data:URI автоматически. Регистрировать файлы
+    в словаре PLAN не нужно: без записи берётся DEFAULT = (1000, 74), то есть
+    в однофайловой сборке кадры ужмутся до 1000 px по ширине.
+
+  КУДА ВСТАВИТЬ
+
+    В index.html — целиком, между </section> секции id="napravleniya"
+    и <section ... id="production">. Секция тёмная, а «Направления» светлая,
+    так что чередование тёмных и светлых карточек не ломается.
+
+  ЧТО УЧТЕНО
+
+    • Свои токены не заводятся — берутся ваши: --graphite, --cream, --greige,
+      --hair-dark, --r-lg, --r, --pad, --sec, --ease.
+    • Все классы с префиксом lt- — с 95 КБ ваших стилей не пересекаются.
+    • Класс rise на секции оставлен: её подхватит ваш IntersectionObserver.
+      Если блок переезжает на другую страницу без этого скрипта — уберите rise,
+      иначе секция останется невидимой.
+    • srcset намеренно нет: в однофайловой сборке вшились бы оба размера,
+      то есть вес удвоился бы без пользы.
+    • Автопрогон не стартует сам и глохнет при prefers-reduced-motion —
+      как остальные анимации на сайте.
+-->
+
+<!-- ======================= СВЕТ ======================= -->
+<section class="card-sec rise" id="svet">
+  <div class="wrap">
+
+    <div class="lt-head">
+      <span class="label label--dim">Свет</span>
+      <h2 class="h2">Одна кухня<br>в трёх светах</h2>
+      <p class="lt-lede">Глянцевый фасад читается по-разному в зависимости от света: днём он зеркалит окно, на закате набирает тёплый тон, вечером живёт на одной подсветке. Кадр зафиксирован — двигается только свет.</p>
+    </div>
+
+    <div class="lt-stage">
+      <img class="lt-shot is-on" src="img/light/day.webp" width="1360" height="1020" loading="lazy" decoding="async"
+           alt="Кухня при прямом дневном солнце: резкие тени от окна на глянцевых фасадах и мраморном полу.">
+      <img class="lt-shot" src="img/light/sunset.webp" width="1360" height="1020" loading="lazy" decoding="async"
+           alt="Та же кухня на закате: низкое солнце заливает пол тёплым золотым светом.">
+      <img class="lt-shot" src="img/light/evening.webp" width="1360" height="1020" loading="lazy" decoding="async"
+           alt="Та же кухня вечером: солнца нет, работают только встроенные потолочные светильники.">
+    </div>
+
+    <div class="lt-bar">
+      <div class="lt-pills" role="group" aria-label="Освещение"></div>
+      <button class="lt-auto" type="button" aria-pressed="false">
+        <span class="lt-auto__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="lt-auto__label">Прогнать свет</span>
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  #svet .lt-head { max-width: 62ch; margin-bottom: var(--pad); }
+  #svet .lt-head .h2 { margin: 10px 0 0; }
+  #svet .lt-lede {
+    margin: 16px 0 0;
+    max-width: 54ch;
+    color: var(--cream-dim);
+    line-height: 1.65;
+  }
+
+  #svet .lt-stage {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: var(--r);
+    background: var(--graphite-2);
+    border: 1px solid var(--hair-dark);
+  }
+  #svet .lt-shot {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.55s var(--ease);
+  }
+  #svet .lt-shot.is-on { opacity: 1; }
+
+  #svet .lt-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--gap);
+    margin-top: var(--gap);
+  }
+  #svet .lt-pills { display: flex; flex-wrap: wrap; gap: var(--gap); flex: 1 1 auto; }
+
+  #svet .lt-pill {
+    flex: 1 1 180px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border: 1px solid var(--hair-dark);
+    border-radius: var(--r-sm);
+    background: var(--graphite);
+    color: var(--cream);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.25s var(--ease), background 0.25s var(--ease);
+  }
+  #svet .lt-pill:hover { border-color: var(--greige); }
+  #svet .lt-pill:focus-visible { outline: 2px solid var(--greige); outline-offset: 3px; }
+  #svet .lt-pill[aria-pressed="true"] {
+    border-color: var(--greige);
+    background: var(--graphite-2);
+  }
+  #svet .lt-dot {
+    width: 20px;
+    height: 20px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--sw);
+    box-shadow: 0 0 18px -2px var(--sw);
+  }
+  #svet .lt-pill b { display: block; font-size: 15px; font-weight: 600; line-height: 1.25; }
+  #svet .lt-pill span {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--cream-dim);
+    font-variant-numeric: tabular-nums;
+  }
+
+  #svet .lt-auto {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 12px 20px;
+    border: 1px solid var(--hair-dark);
+    border-radius: var(--pill);
+    background: transparent;
+    color: var(--cream);
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color 0.25s var(--ease), color 0.25s var(--ease);
+  }
+  #svet .lt-auto:hover { border-color: var(--greige); color: var(--greige); }
+  #svet .lt-auto:focus-visible { outline: 2px solid var(--greige); outline-offset: 3px; }
+  #svet .lt-auto__bars { display: flex; align-items: center; gap: 2px; }
+  #svet .lt-auto__bars i { display: block; width: 3px; height: 11px; border-radius: 1px; background: currentColor; }
+
+  @media (max-width: 640px) {
+    #svet .lt-pill { flex-basis: 100%; }
+    #svet .lt-auto { width: 100%; justify-content: center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #svet .lt-shot { transition: none; }
+  }
+</style>
+
+<script>
+(function () {
+  var section = document.getElementById('svet');
+  if (!section) return;
+
+  var STATES = [
+    { name: 'День',  light: 'прямое солнце',          kelvin: 5400, tint: '#7fa3c4' },
+    { name: 'Закат', light: 'низкое солнце',          kelvin: 3400, tint: '#e0a24a' },
+    { name: 'Вечер', light: 'встроенные светильники', kelvin: 2800, tint: '#c97a45' }
+  ];
+  var CYCLE_MS = 2800;
+
+  var shots   = section.querySelectorAll('.lt-shot');
+  var pills   = section.querySelector('.lt-pills');
+  var autoBtn = section.querySelector('.lt-auto');
+  var autoTxt = section.querySelector('.lt-auto__label');
+  var calm    = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  var buttons = [];
+  var index = 0;
+  var timer = null;
+
+  STATES.forEach(function (state, i) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'lt-pill';
+    b.style.setProperty('--sw', state.tint);
+    b.setAttribute('aria-pressed', String(i === 0));
+    b.innerHTML = '<span class="lt-dot" aria-hidden="true"></span><span class="lt-pill__t"><b></b><span></span></span>';
+    b.querySelector('b').textContent = state.name;
+    b.querySelector('.lt-pill__t span').textContent = '≈' + state.kelvin + ' K · ' + state.light;
+    b.addEventListener('click', function () { stop(); show(i); });
+    pills.appendChild(b);
+    buttons.push(b);
+  });
+
+  function show(i) {
+    index = (i + STATES.length) % STATES.length;
+    for (var n = 0; n < shots.length; n++) {
+      shots[n].classList.toggle('is-on', n === index);
+    }
+    buttons.forEach(function (b, n) { b.setAttribute('aria-pressed', String(n === index)); });
+  }
+
+  function start() {
+    if (calm.matches) return;                 // системная настройка важнее кнопки
+    timer = setInterval(function () { show(index + 1); }, CYCLE_MS);
+    autoBtn.setAttribute('aria-pressed', 'true');
+    autoTxt.textContent = 'Остановить';
+  }
+  function stop() {
+    if (timer) { clearInterval(timer); timer = null; }
+    autoBtn.setAttribute('aria-pressed', 'false');
+    autoTxt.textContent = 'Прогнать свет';
+  }
+
+  autoBtn.addEventListener('click', function () { timer ? stop() : start(); });
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) stop();              // во вкладке в фоне крутить незачем
+  });
+})();
+</script>
