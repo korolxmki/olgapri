@@ -1,5 +1,5 @@
 ﻿# Разбор портфолио Максима.
-# Ставит всё нужное в _служебное\venv (рядом с этим файлом) и запускает portfolio_sort.py.
+# Ставит всё нужное в _служебное\venv (рядом с этим файлом, без кэша pip в профиле) и запускает portfolio_sort.py.
 #
 # Положить папку со скриптами в «фото мебель\_служебное» и запустить:
 #   powershell -ExecutionPolicy Bypass -File ".\run.ps1"            # всё сразу (analyze + apply)
@@ -22,9 +22,9 @@ if (-not (Test-Path $py)) {
     elseif (Get-Command python -ErrorAction SilentlyContinue) { & python -m venv $venv }
     else { Write-Host "Не найден Python. Установите: winget install Python.Python.3.12" -ForegroundColor Red; exit 1 }
     Check "создание venv"
-    & $py -m pip install --upgrade pip; Check "pip"
-    & $py -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu; Check "torch"
-    & $py -m pip install -r (Join-Path $here "requirements.txt"); Check "библиотеки"
+    & $py -m pip install --no-cache-dir --upgrade pip; Check "pip"
+    & $py -m pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu; Check "torch"
+    & $py -m pip install --no-cache-dir -r (Join-Path $here "requirements.txt"); Check "библиотеки"
 }
 
 $env:PYTHONUTF8 = "1"
