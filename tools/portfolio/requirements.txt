@@ -1,0 +1,8 @@
+# torch и torchvision ставятся отдельно и ВМЕСТЕ (CPU-сборка), иначе версии не совпадут:
+#   python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+open_clip_torch>=2.24
+pillow>=10.0
+pillow-heif>=0.16
+imagehash>=4.3
+opencv-python-headless>=4.8
+numpy>=1.24
